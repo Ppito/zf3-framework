@@ -1,0 +1,49 @@
+{% if exception is defined %}
+    <hr/>
+    <h2>Additional information:</h2>
+    <h3>{{ getClassName(exception) }}</h3>
+    <dl>
+        <dt>File:</dt>
+        <dd>
+            <pre>{{ exception.getFile() }}:{{ exception.getLine() }}</pre>
+        </dd>
+        <dt>Message:</dt>
+        <dd>
+            <pre>{{ exception.getMessage()|e }}</pre>
+        </dd>
+        <dt>Stack trace:</dt>
+        <dd>
+            <pre>{{ exception.getTraceAsString()|e }}</pre>
+        </dd>
+    </dl>
+    {% set ex = exception.getPrevious() %}
+    {% if ex is not null %}
+        <hr/>
+
+        <h2>Previous exceptions:</h2>
+        <ul class="list-unstyled">
+            {% for i in 0..50 %}
+                <li>
+                    <h3>{{ getClassName(ex) }}</h3>
+                    <dl>
+                        <dt>File:</dt>
+                        <dd>
+                            <pre>{{ ex.getFile() }}:{{ ex.getLine() }}</pre>
+                        </dd>
+                        <dt>Message:</dt>
+                        <dd>
+                            <pre>{{ ex.getMessage()|e }}</pre>
+                        </dd>
+                        <dt>Stack trace:</dt>
+                        <dd>
+                            <pre>{{ ex.getTraceAsString()|e }}</pre>
+                        </dd>
+                    </dl>
+                </li>
+                {% set ex = exception.getPrevious() %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% else %}
+    <h3>No Exception available</h3>
+{% endif %}

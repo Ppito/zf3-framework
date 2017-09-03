@@ -1,0 +1,28 @@
+{% set has_left_col  = tm_hasModule(['left-aside-top', 'left-aside-middle', 'left-aside-bottom']) %}
+{% set has_right_col = tm_hasModule(['right-aside-top', 'right-aside-middle', 'right-aside-bottom']) %}
+
+{% if tm_hasModule('content') == false %}
+    <div class="container" data-tm="content">
+        <div class="row">
+            {% if has_left_col == true %}
+                <div class="col-auto">
+                    {% include 'defaultTemplate/aside.html.twig' with {'type': 'left'} %}
+                </div>
+            {% endif %}
+
+            <div class="col">
+                {% include 'partial/module.html.twig' with {'moduleName': 'content-top'} %}
+                {{ content|raw }}
+                {% include 'partial/module.html.twig' with {'moduleName': 'content-bottom'} %}
+            </div>
+
+            {% if has_right_col == true %}
+                <div class="col-auto">
+                    {% include 'defaultTemplate/aside.html.twig' with {'type': 'right'} %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    {% include 'partial/module.html.twig' with {'moduleName': 'content', 'raw': true} %}
+{% endif %}

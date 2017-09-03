@@ -1,0 +1,10 @@
+@import "~compass-mixins/lib/compass";
+
+.btn {
+  @include transition(background-color .2s linear, border-color .2s linear);
+
+  &:focus,
+  &:active:focus {
+    outline: 0;
+  }
+}

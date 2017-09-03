@@ -1,0 +1,12 @@
+version: '2'
+services:
+  zf:
+    image: 118000gp/pratique-base:php7.1-dev
+    ports:
+     - "80:80"
+    volumes:
+     - .:/var/www
+    environment:
+     - WEB_DOCUMENT_ROOT=/var/www/public
+     - WEB_DOMAIN=zend3.local.lan
+     - TERM=xterm

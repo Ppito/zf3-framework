@@ -1,0 +1,14 @@
+.idea/*
+.sass-cache/
+vendor/
+config/development.config.php
+config/autoload/*.local.php
+data/cache/*
+!data/cache/.gitkeep
+data/DoctrineMongoODMModule/*
+public/bower_components
+node_modules/
+composer.lock
+yarn.lock
+public/build/*
+build/*

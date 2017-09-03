@@ -1,0 +1,10 @@
+{% set moduleList = ['header-top', 'header-middle', 'header-bottom'] %}
+{% if tm_hasModule('header') == false and tm_hasModule(moduleList) == true %}
+    <header class="container" data-tm="header">
+        {% for moduleName in moduleList %}
+            {% include 'partial/module.html.twig' with {'moduleName': moduleName} %}
+        {% endfor %}
+    </header>
+{% elseif tm_hasModule('header') == true %}
+    {% include 'partial/module.html.twig' with {'moduleName': 'header', 'raw': true} %}
+{% endif %}

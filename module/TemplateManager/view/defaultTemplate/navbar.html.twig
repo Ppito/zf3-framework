@@ -1,0 +1,10 @@
+{% set moduleList = ['navbar-top', 'navbar-middle', 'navbar-bottom'] %}
+{% if tm_hasModule('navbar') == false and tm_hasModule(moduleList) == true %}
+    <div class="container" data-tm="navbar">
+        {% for moduleName in moduleList %}
+            {% include 'partial/module.html.twig' with {'moduleName': moduleName} %}
+        {% endfor %}
+    </div>
+{% elseif tm_hasModule('navbar') == true %}
+    {% include 'partial/module.html.twig' with {'moduleName': 'navbar', 'raw': true} %}
+{% endif %}

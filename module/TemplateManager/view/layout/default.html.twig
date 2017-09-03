@@ -1,0 +1,47 @@
+{#{% spaceless %}#}
+{{ doctype('XHTML5') }}
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="utf-8" />
+        {{ headTitle('ZF Skeleton Application').setSeparator(' - ')|raw }}
+
+        <!-- Meta -->
+        {{
+            headMeta()
+                .appendName('viewport', 'width=device-width, initial-scale=1, shrink-to-fit=no')
+                .appendHttpEquiv('X-UA-Compatible', 'IE=edge')|raw
+        }}
+        {% block meta %}{% endblock %}
+
+        <!-- Le styles -->
+        {{
+            headLink({'rel': 'shortcut icon', 'type': 'image/vnd.microsoft.icon', 'href': basePath() ~ '/img/favicon.ico'})
+                .prependStylesheet(asset('build/css/style.css'))|raw
+        }}
+        {% block stylesheets %}{% endblock %}
+
+        {{ inlineScript()|raw }}
+        {{ headScript()|raw }}
+    {% endblock %}
+</head>
+<body class="app">
+    {% include "template/custom_top" %}
+    {% include "template/navbar" %}
+    {% include "template/header" %}
+    {% include "template/container" with {'content' : block('content')} %}
+    {% include "template/bottom" %}
+    {% include "template/footer" %}
+    {% include "template/custom_bottom" %}
+
+    {{
+        footerInlineScript()
+            .appendFile(asset('build/manifest.js'),'text/javascript')
+            .appendFile(asset('build/js/common.js'),'text/javascript')
+            .appendFile(asset('build/js/app.js'),'text/javascript')|raw
+    }}
+    {{ footerScript()|raw }}
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
+{#{% endspaceless %}#}

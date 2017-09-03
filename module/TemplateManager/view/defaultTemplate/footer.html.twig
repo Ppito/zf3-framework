@@ -1,0 +1,10 @@
+{% set moduleList = ['footer-top', 'footer-middle', 'footer-bottom'] %}
+{% if tm_hasModule('footer') == false and tm_hasModule(moduleList) == true %}
+    <footer class="container" data-tm="footer">
+        {% for moduleName in moduleList %}
+            {% include 'partial/module.html.twig' with {'moduleName': moduleName} %}
+        {% endfor %}
+    </footer>
+{% elseif tm_hasModule('footer') == true %}
+    {% include 'partial/module.html.twig' with {'moduleName': 'footer', 'raw': true} %}
+{% endif %}

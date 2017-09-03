@@ -1,0 +1,53 @@
+{% extends 'layout/layout' %}
+
+{% block title %}Home{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-4">
+            <h2>Follow Development</h2>
+            <p>
+                Zend Framework is under active development. If you are
+                interested in following the development of ZF, you can check
+                <a href="http://framework.zend.com/blog/">ZF dev blog</a>,
+                and <a href="https://github.com/issues?utf8=%E2%9C%93&amp;q=is:issue+org:zendframework">ZF issue tracker</a>
+                (link requires a GitHub account). This is a great resource
+                for staying up to date with the latest developments!
+            </p>
+
+            <p><a class="btn btn-primary" href="http://framework.zend.com/" target="_blank" role="button">ZF Development Portal &raquo;</a></p>
+        </div>
+
+        <div class="col-md-4">
+            <h2>Discover Modules</h2>
+            <p>
+                The community is working on developing a community site to
+                serve as a repository and gallery for ZF modules. The
+                project is available <a href="https://github.com/zendframework/modules.zendframework.com">on GitHub</a>.
+                The site is currently live and currently contains a list of
+                some of the modules already available for ZF.
+            </p>
+
+            <p><a class="btn btn-primary" href="http://modules.zendframework.com/" target="_blank" role="button">Explore ZF Modules &raquo;</a></p>
+        </div>
+
+        <div class="col-md-4">
+            <h2>Help &amp; Support</h2>
+            <p>
+                If you need any help or support while developing with ZF,
+                you may reach us via IRC: <a href="irc://irc.freenode.net/zftalk">#zftalk on Freenode</a>.
+                We'd love to hear any questions or feedback you may have
+                regarding this release. Alternatively, you may subscribe
+                and post questions to the <a href="http://framework.zend.com/archives/">mailing lists</a>.
+            </p>
+
+            <p><a class="btn btn-primary" href="http://webchat.freenode.net?channels=zftalk" target="_blank" role="button">Ping us on IRC &raquo;</a></p>
+        </div>
+    </div>
+{% endblock %}
+

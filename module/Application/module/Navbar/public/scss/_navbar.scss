@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+nav[data-module="navbar"] {
+  box-shadow: 0 .3572em .75em rgba(43, 43, 43, .25);
+
+  .navbar-brand > img {
+    display: initial;
+  }
+}

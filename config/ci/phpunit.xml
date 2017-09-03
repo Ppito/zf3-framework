@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./bootstrap.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="application Test Suite">
+            <directory>../../module/*/test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+        <env name="APPENV" value="test"/>
+        <env name="APPLICATION_ENVIRONMENT" value="test"/>
+        <!-- OB_ENABLED should be enabled for some tests to check if all
+             functionality works as expected. Such tests include those for
+             Zend\Soap and Zend\Session, which require that headers not be sent
+             in order to work. -->
+        <env name="TESTS_ZEND_OB_ENABLED" value="false" />
+    </php>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../../module</directory>
+            <!--directory suffix=".php">tests</directory-->
+            <exclude>
+                <!--file>./app/console</file-->  <!-- don't run the console app -->
+                <!--directory suffix=".php">/path/to/files</directory-->
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-clover" target="../../build/logs/clover.xml"/>
+        <log type="coverage-xml" target="../../build/coverage/xml"/>
+        <log type="coverage-html" target="../../build/coverage/html"/>
+        <log type="junit" target="../../build/logs/junit.xml" logIncompleteSkipped="true"/>
+        <log type="coverage-text" target="php://stdout"/>
+    </logging>
+
+    <groups>
+        <include>
+            <!--group>only</group--><!-- when enabled, it should just run a very very small number of tests -->
+        </include>
+        <exclude>
+            <!-- group>proved</group --><!-- had just been put there to prove something -->
+            <!-- group>externalTest</group --><!-- talks to the outside world -->
+            <!-- group>livesite</group --><!-- talks to the main website -->
+        </exclude>
+    </groups>
+</phpunit>

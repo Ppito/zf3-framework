@@ -1,0 +1,116 @@
+cache:
+  paths:
+    - vendor/
+    - node_modules/
+    - public/build/
+    - composer.lock
+    - yarn.lock
+
+stages:
+  - build
+  - metrics
+  - package
+  - deploy
+
+composer:
+  image: 118000gp/pratique-base:php7.1
+  stage: build
+  only:
+    - branches
+  script:
+    - composer update
+
+yarn:
+  image: kkarczmarczyk/node-yarn
+  stage: build
+  only:
+    - master
+    - develop
+    - /^.*_integ$/
+  script:
+    - yarn install
+    - yarn upgrade
+    - yarn encore production
+
+phing:
+  image: 118000gp/pratique-base:php7.1-dev
+  stage: metrics
+  only:
+    - branches
+  script:
+    - composer phing
+
+package:
+  image: 118000gp/pratique-base:php7.1
+  stage: package
+  only:
+    - master
+    - develop
+    - /^.*_integ$/
+  script:
+    - composer dev-off
+    - composer update --no-dev
+    - mkdir -p dist
+    - tar cjf dist/${CI_PROJECT_NAME}_${CI_PIPELINE_ID}_${CI_COMMIT_REF_NAME}.tar.bz2
+      --exclude ./.git
+      --exclude ./.sass-cache
+      --exclude ./.idea
+      --exclude ./build
+      --exclude ./dist
+      --exclude ./node_modules
+      --exclude ./data/cache
+      --exclude ./composer.lock
+      --exclude ./yarn.lock
+      .
+  artifacts:
+    name: "${CI_PROJECT_NAME}_${CI_PIPELINE_ID}_${CI_COMMIT_REF_NAME}"
+    expire_in: "3 mos"
+    paths:
+      - dist/${CI_PROJECT_NAME}_${CI_PIPELINE_ID}_${CI_COMMIT_REF_NAME}.tar.bz2
+
+tag_version:
+  image: 118000gp/pratique-base:php7.1
+  stage: package
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - master
+  script:
+    - "curl -XPOST
+      --header \"PRIVATE-TOKEN: ${GITLAB_API_KEY}\"
+      \"${GITLAB_HOST}/api/v4/projects/${CI_PROJECT_ID}/repository/tags?tag_name=`date +V%y.%m.%W`.${CI_PIPELINE_ID}&ref=master\""
+
+deploy to staging:
+  image: 118000gp/pratique-base:base
+  stage: deploy
+  environment: Preprod
+  dependencies:
+    - package
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - develop
+    - /^.*_integ$/
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+  script:
+    - scp dist/${CI_PROJECT_NAME}_${CI_PIPELINE_ID}_${CI_COMMIT_REF_NAME}.tar.bz2
+      root@${PREPROD_ENVIRONMENT}:/var/dist/
+    - ssh -t root@${PREPROD_ENVIRONMENT} "/root/preprod-deploy/deploy-v2.sh ${CI_PROJECT_NAME} ${CI_PROJECT_NAME}_${CI_PIPELINE_ID}_${CI_COMMIT_REF_NAME}.tar.bz2"
+
+deploy to production:
+  image: mikesir87/aws-cli:latest
+  stage: deploy
+  environment: Prod
+  dependencies:
+    - package
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - master
+  script:
+    - aws s3 cp dist/${CI_PROJECT_NAME}_${CI_PIPELINE_ID}_${CI_COMMIT_REF_NAME}.tar.bz2 s3://${BUCKET_S3}/${CI_PROJECT_NAME}/

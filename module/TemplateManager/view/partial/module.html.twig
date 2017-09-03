@@ -1,0 +1,13 @@
+{% if tm_hasModule(moduleName) == true %}
+    {% for _module in tm_getModule(moduleName) %}
+        {% if raw is not defined or raw == false %}
+        <div class="row" data-tm="{{ moduleName }}">
+            <div class="col">
+                {{ _module|raw }}
+            </div>
+        </div>
+        {% else %}
+            {{ _module|raw }}
+        {% endif %}
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,10 @@
+{% set moduleList = ['bottom-top', 'bottom-bottom', 'bottom-bottom'] %}
+{% if tm_hasModule('bottom') == false and tm_hasModule(moduleList) == true %}
+    <div class="container"data-tm="bottom">
+        {% for moduleName in moduleList %}
+            {% include 'partial/module.html.twig' with {'moduleName': moduleName} %}
+        {% endfor %}
+    </div>
+{% elseif tm_hasModule('bottom') == true %}
+    {% include 'partial/module.html.twig' with {'moduleName': 'bottom', 'raw': true} %}
+{% endif %}
